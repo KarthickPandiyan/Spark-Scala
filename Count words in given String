@@ -1,0 +1,80 @@
+#Count words from given String
+------------------------------
+
+scala> val a = "Hi Hello How Hi Hello Are you Are you"
+a: String = Hi Hello How Hi Hello Are you Are you
+
+scala> val b = a.split("::")
+b: Array[String] = Array(Hi Hello How Hi Hello Are you Are you)
+
+scala> val b = a.split("::").map(x=>x.split(" ")).map(x=>x.mkString(","))
+b: Array[String] = Array(Hi,Hello,How,Hi,Hello,Are,you,Are,you)
+
+scala> val b = a.split("::").map(x=>x.split(" ")).flatMap(x=>x)
+b: Array[String] = Array(Hi, Hello, How, Hi, Hello, Are, you, Are, you)
+
+scala> b.foreach(println)
+Hi
+Hello
+How
+Hi
+Hello
+Are
+you
+Are
+you
+
+scala> b.groupBy(x=>x)
+res4: scala.collection.immutable.Map[String,Array[String]] = Map(How -> Array(How), Are -> Array(Are, Are), you -> Array(you, you), Hello -> Array(Hello, Hello), Hi -> Array(Hi, Hi))
+
+scala> b.groupBy(x=>x).mapValues(x=>x.length)
+res6: scala.collection.immutable.Map[String,Int] = Map(How -> 1, Are -> 2, you -> 2, Hello -> 2, Hi -> 2)
+
+
+#Issue I faced
+----------------
+scala> val b = a.split("::").flatMap(x=>x)
+b: Array[Char] = Array(H, i,  , H, e, l, l, o,  , H, o, w,  , H, i,  , H, e, l, l, o,  , A, r, e,  , y, o, u,  , A, r, e,  , y, o, u)
+
+scala> val b = a.split("::").map(x=>x)
+b: Array[String] = Array(Hi Hello How Hi Hello Are you Are you)
+
+scala> val b = a.split("::").map(x=>x.mkString(","))
+b: Array[String] = Array(H,i, ,H,e,l,l,o, ,H,o,w, ,H,i, ,H,e,l,l,o, ,A,r,e, ,y,o,u, ,A,r,e, ,y,o,u)
+
+scala> val b = a.split("::").map(x=>x.split(" ")).map(x=>x.mkString(",")).flatMap(x=>x)
+b: Array[Char] = Array(H, i, ,, H, e, l, l, o, ,, H, o, w, ,, H, i, ,, H, e, l, l, o, ,, A, r, e, ,, y, o, u, ,, A, r, e, ,, y, o, u)
+
+scala> val b = a.split("::").map(x=>x.split(" ")).flatMap(x=>x)
+b: Array[String] = Array(Hi, Hello, How, Hi, Hello, Are, you, Are, you)
+
+scala> b.foreach(println)
+Hi
+Hello
+How
+Hi
+Hello
+Are
+you
+Are
+you
+
+scala> val b = a.split("::").map(x=>x.split(" ")).flatMap(x=>x)
+b: Array[String] = Array(Hi, Hello, How, Hi, Hello, Are, you, Are, you)
+
+scala> groupBy(b)
+<console>:26: error: not found: value groupBy
+       groupBy(b)
+       ^
+
+scala> b.groupBy()
+<console>:26: error: not enough arguments for method groupBy: (f: String => K)scala.collection.immutable.Map[K,Array[String]].
+Unspecified value parameter f.
+       b.groupBy()
+                ^
+
+scala> b.groupBy(b)
+<console>:26: error: type mismatch;
+ found   : Array[String]
+ required: String => ?
+       b.groupBy(b)
