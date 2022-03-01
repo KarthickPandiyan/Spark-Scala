@@ -1,0 +1,25 @@
+#Finding next "Wednesday" from given date in #spark
+
+#- next_day function is very useful when we want to find the next Monday or Tuesday (etc) occurring from the current date.
+
+#Below is an example to illustrate the usage:
+
+#Problem Statement: We have input dataset new_joinees.csv having below columns informing when the employees will join the "Lucky Charm" project.
+name,joining_date
+#The core team is planning to conduct KT sessions on every Wednesday. However, not to overwhelm the employees, if their joining day is on Wednesday, KT will occur on next Wednesday.
+We need to determine the KT session date for each of the new joiners.
+
+ //Step-1: Load the input file
+ val joiningDF = spark.read.format("csv")
+  .option("header",true)
+  .option("path","C:\\BigData\\office\\new_joinees.csv")
+  .load()
+
+ //Step-2: Show the loaded input file
+ joiningDF.show(false)
+
+ //Step-3: Find KT date and show results
+ joiningDF
+  .withColumn("joining_day",date_format(col("joining_date"),"E"))
+  .withColumn("planned_KT_date",next_day(col("joining_date"),"WED"))
+  .show(false)
