@@ -1,0 +1,20 @@
+Data Engineer : Interview Question
+=======================
+1. Create two data frame Employee.csv(Employee id,Emp Name, dept id)
+and Department.csv(Department id, department name)
+2. Join these based on Department id and extract Employee id, Employee name ,
+Department Name
+3. Filter record from Step2 where department id = 100
+
+Answer:
+=====
+
+val EmployeeDf=spark.read.format("csv").option("header",true).option("inferSchema"true).option("path","/Employee.csv").load();
+val DeptDf=spark.read.format("csv").option("header",true).option("inferSchema"true).option("path","/Department.csv").load();
+
+val joinCondition=EmployeeDf.col("dept id") === DeptDf.col("Department id");
+val joinType="inner"; 
+val joinedDf=EmployeeDf.join(DeptDf,joinCondition,JoinType)
+val tempDf=joinedDf.select("Employee id", "Employee name" ,"Department Name","Department id")
+
+tempDf.filter(col("Department id") = 100).show(10,false);
